@@ -1,6 +1,6 @@
 # Decisions
 
-- Supabase Auth email/password and magic-link flows are provided; configure the production redirect URL in Supabase Auth settings.
+- Supabase Auth uses direct email/password sign-up and sign-in. Keep Confirm email disabled in the Supabase Email provider so the app does not send confirmation or magic-link emails.
 - Server routes use the authenticated Supabase session, so RLS remains effective. The service-role key is documented for operational use but is not used in request handlers.
 - Link extraction uses Readability; JavaScript-rendered or paywalled pages can fail gracefully.
 - In-memory rate limiting is suitable for a single Vercel instance but should be replaced with Redis/Upstash for strict multi-instance rate limiting.

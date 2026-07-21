@@ -37,9 +37,7 @@ A private knowledge-management app built with Next.js, Supabase, Claude, OpenAI 
    
    ```
 
-5. In Supabase Dashboard → Authentication → URL Configuration, add `http://localhost:3000` and your Vercel URL as redirect URLs.
-
-6. Before a public launch, configure a custom SMTP provider in Supabase Dashboard → Authentication → SMTP Settings. Supabase's built-in email sender is intended only for testing and has a very low email rate limit.
+5. In Supabase Dashboard → Authentication → Providers → Email, turn **Confirm email** off. This app uses direct email-and-password authentication and does not send confirmation or magic-link emails.
 
 ## GitHub and Vercel deployment
 
