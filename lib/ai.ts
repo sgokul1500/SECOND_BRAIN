@@ -5,8 +5,8 @@ export type Classification = { title: string; summary: string; tags: string[]; p
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; embeddings?: Array<{ values: number[] }>; embedding?: { values: number[] }; error?: { message?: string } };
 
 async function geminiRequest(path: string, body: Record<string, unknown>) {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error('GEMINI_API_KEY is not configured on the server.');
+  const key = process.env.GROQ_API_KEY;
+  if (!key) throw new Error('GROQ_API_KEY is not configured on the server.');
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
