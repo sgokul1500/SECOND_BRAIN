@@ -1,0 +1,1 @@
+import CaptureForm from '@/components/capture-form'; export default function CapturePage() { return <><h1 className="text-3xl font-bold">Capture</h1><p className="muted mb-6 mt-2">Save a note, article, PDF, Markdown, or text file. AI will organize it automatically.</p><CaptureForm /></>; }

@@ -1,0 +1,1 @@
+import AskChat from '@/components/ask-chat'; export default function AskPage() { return <><h1 className="text-3xl font-bold">Ask your brain</h1><p className="muted mb-6 mt-2">Answers are synthesized only from your saved notes.</p><AskChat /></>; }

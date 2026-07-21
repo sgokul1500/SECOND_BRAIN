@@ -1,0 +1,3 @@
+import Graph from '@/components/graph'; import { createClient } from '@/lib/supabase/server';
+export default async function GraphPage() { const supabase = await createClient(); const { data: items } = await supabase.from('items').select('*').order('created_at', { ascending: false }); const ids = (items ?? []).map((item) => item.id); const { data: links } = ids.length ? await supabase.from('links').select('*').or(`source_id.in.(${ids.join(',')}),target_id.in.(${ids.join(',')})`) : { data: [] }; return <><h1 className="text-3xl font-bold">Knowledge graph</h1><p className="muted mb-6 mt-2">Explore relationships among your saved knowledge.</p><Graph items={items ?? []} links={links ?? []} /></>; }
+
