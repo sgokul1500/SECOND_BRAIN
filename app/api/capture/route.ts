@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     else rawContent = String(form.get('content') ?? '').trim();
     if (!rawContent.trim()) throw new Error('There was no text to save.');
     const metadata = await classify(rawContent, title); const vector = await embed(`${metadata.title}\n${metadata.summary}\n${rawContent}`);
-    const { data: item, error } = await supabase.from('items').insert({ user_id: user.id, type: kind === 'link' ? 'link' : kind === 'file' ? (filePath?.endsWith('.pdf') ? 'pdf' : 'file') : 'note', title: metadata.title, raw_content: rawContent, source_url: sourceUrl, file_path: filePath, ...metadata, embedding: vector }).select().single();
+    const { data: item, error } = await supabase.from('items').insert({ user_id: user.id, type: kind === 'link' ? 'link' : kind === 'file' ? (filePath?.endsWith('.pdf') ? 'pdf' : 'file') : 'note', raw_content: rawContent, source_url: sourceUrl, file_path: filePath, ...metadata, embedding: vector }).select().single();
     if (error) throw error;
     const { data: matches, error: searchError } = await supabase.rpc('match_items', { query_embedding: vector, match_user_id: user.id, match_threshold: 0.72, match_count: 6 });
     if (searchError) throw searchError;
