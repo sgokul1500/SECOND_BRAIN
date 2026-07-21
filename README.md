@@ -5,8 +5,7 @@ A private knowledge-management app built with Next.js, Supabase, Claude, OpenAI 
 ## Features
 
 - Capture notes, readable URLs, PDFs, Markdown, and text files.
-- Claude produces titles, summaries, tags, and PARA classification reasoning.
-- If the Anthropic API is unavailable or out of credit, OpenAI `gpt-4.1-mini` automatically handles classification and RAG answers; embeddings always use OpenAI.
+- Gemini's free-tier API produces titles, summaries, tags, PARA classification, RAG answers, and 1,536-dimensional embeddings.
 - OpenAI embeddings find related notes and create graph edges at a 0.72 similarity threshold.
 - Interactive filterable knowledge graph, item editing/deletion, and RAG Q&A with streamed answers and source links.
 - Supabase Auth and row-level security isolate every user's data.
@@ -21,7 +20,7 @@ A private knowledge-management app built with Next.js, Supabase, Claude, OpenAI 
    npm run dev
    ```
 
-2. Copy `.env.example` to `.env.local` and fill values. The Supabase URL must be the project base URL, such as `https://PROJECT_REF.supabase.co` — not its REST endpoint.
+2. Copy `.env.example` to `.env.local` and fill values. Create a server-side `GEMINI_API_KEY` in Google AI Studio. The Supabase URL must be the project base URL, such as `https://PROJECT_REF.supabase.co` — not its REST endpoint.
 
 3. In Supabase SQL Editor, run [`supabase/migrations/20260721000000_second_brain.sql`](supabase/migrations/20260721000000_second_brain.sql), or with a linked CLI:
 
@@ -53,8 +52,7 @@ npx vercel link
 npx vercel env add NEXT_PUBLIC_SUPABASE_URL production
 npx vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
 npx vercel env add SUPABASE_SERVICE_ROLE_KEY production
-npx vercel env add ANTHROPIC_API_KEY production
-npx vercel env add OPENAI_API_KEY production
+npx vercel env add GEMINI_API_KEY production
 npx vercel --prod
 ```
 
