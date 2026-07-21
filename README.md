@@ -6,6 +6,7 @@ A private knowledge-management app built with Next.js, Supabase, Claude, OpenAI 
 
 - Capture notes, readable URLs, PDFs, Markdown, and text files.
 - Claude produces titles, summaries, tags, and PARA classification reasoning.
+- If the Anthropic API is unavailable or out of credit, OpenAI `gpt-4.1-mini` automatically handles classification and RAG answers; embeddings always use OpenAI.
 - OpenAI embeddings find related notes and create graph edges at a 0.72 similarity threshold.
 - Interactive filterable knowledge graph, item editing/deletion, and RAG Q&A with streamed answers and source links.
 - Supabase Auth and row-level security isolate every user's data.
