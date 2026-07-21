@@ -33,7 +33,7 @@ export default function LoginPage() {
         : result.error.message);
       return;
     }
-    if (mode === 'password') {
+    if (mode === 'password' || result.data.session) {
       router.push('/');
       router.refresh();
     } else {
