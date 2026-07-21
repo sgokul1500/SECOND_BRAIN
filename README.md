@@ -20,7 +20,7 @@ A private knowledge-management app built with Next.js, Supabase, Claude, OpenAI 
    npm run dev
    ```
 
-2. Copy `.env.example` to `.env.local` and fill values. Create a server-side `GROQ_API_KEY`. The Supabase URL must be the project base URL, such as `https://PROJECT_REF.supabase.co` — not its REST endpoint.
+2. Copy `.env.example` to `.env.local` and fill values. Create a server-side `OPENROUTER_API_KEY` (or `GROQ_API_KEY`) as needed. The Supabase URL must be the project base URL, such as `https://PROJECT_REF.supabase.co` — not its REST endpoint.
 
 3. In Supabase SQL Editor, run [`supabase/migrations/20260721000000_second_brain.sql`](supabase/migrations/20260721000000_second_brain.sql), or with a linked CLI:
 
@@ -52,7 +52,7 @@ npx vercel link
  npx vercel env add NEXT_PUBLIC_SUPABASE_URL production
  npx vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
  npx vercel env add SUPABASE_SERVICE_ROLE_KEY production
- npx vercel env add GROQ_API_KEY production
+ npx vercel env add OPENROUTER_API_KEY production
 npx vercel --prod
 ```
 
