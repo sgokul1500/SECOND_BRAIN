@@ -1,5 +1,5 @@
 'use client';
-import dynamic from 'next/dynamic'; import { useMemo, useRef, useState } from 'react'; import type { BrainLink, Item } from '@/lib/types';
+import dynamic from 'next/dynamic'; import { useMemo, useState } from 'react'; import type { BrainLink, Item } from '@/lib/types';
 // The package does not ship a compatible declaration in this setup; declare its
 // runtime props at the dynamic boundary while retaining type safety in our data.
 const ForceGraph2D = dynamic<any>(() => import('react-force-graph-2d').then((module) => module.default), { ssr: false });
