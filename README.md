@@ -1,18 +1,18 @@
 # Second Brain
 
-A private knowledge-management app built with Next.js, Supabase, Claude, OpenAI embeddings, and an interactive graph.
+A private knowledge-management app built with Next.js, Supabase, OpenRouter, and an interactive knowledge graph.
 
 ## Features
 
 - Capture notes, readable URLs, PDFs, Markdown, and text files.
-- Gemini's free-tier API produces titles, summaries, tags, PARA classification, RAG answers, and 1,536-dimensional embeddings.
-- OpenAI embeddings find related notes and create graph edges at a 0.72 similarity threshold.
-- Interactive filterable knowledge graph, item editing/deletion, and RAG Q&A with streamed answers and source links.
-- Supabase Auth and row-level security isolate every user's data.
+- OpenRouter free-model routing creates titles, summaries, tags, PARA classification, and RAG answers.
+- Local 1,536-dimensional normalized vectors provide no-cost similarity linking.
+- Interactive graph, searchable item list, editing, deletion, and private RAG Q&A.
+- Supabase Auth and RLS isolate every user's data.
 
-## Local setup
+## Setup
 
-1. Install Node.js 20 or newer, then run:
+1. Install Node.js 20+, then run:
 
    ```powershell
    npm install
@@ -20,48 +20,23 @@ A private knowledge-management app built with Next.js, Supabase, Claude, OpenAI 
    npm run dev
    ```
 
-2. Copy `.env.example` to `.env.local` and fill values. Create a server-side `OPENROUTER_API_KEY` (or `GROQ_API_KEY`) as needed. The Supabase URL must be the project base URL, such as `https://PROJECT_REF.supabase.co` — not its REST endpoint.
+2. Copy `.env.example` to `.env.local`. Set the Supabase project base URL and create a new `OPENROUTER_API_KEY` at OpenRouter. Use `OPENROUTER_MODEL=openrouter/free` for free-model routing.
 
-3. In Supabase SQL Editor, run [`supabase/migrations/20260721000000_second_brain.sql`](supabase/migrations/20260721000000_second_brain.sql), or with a linked CLI:
+3. Run [the Supabase migration](supabase/migrations/20260721000000_second_brain.sql), then confirm `items` and `links` exist.
 
-   ```powershell
-   npx supabase login
-   npx supabase link --project-ref YOUR_PROJECT_REF
-   npx supabase db push
-   ```
+4. In Supabase Dashboard, disable **Authentication → Providers → Email → Confirm email** for direct email/password sign-in.
 
-4. Confirm the `items` and `links` tables exist:
+## Vercel environment variables
 
-   ```sql
-   select table_name from information_schema.tables where table_schema = 'public' and table_name in ('items', 'links');
-   
-   ```
+Set these in Vercel for Production, Preview, and Development as appropriate:
 
-5. In Supabase Dashboard → Authentication → Providers → Email, turn **Confirm email** off. This app uses direct email-and-password authentication and does not send confirmation or magic-link emails.
-
-## GitHub and Vercel deployment
-
-```powershell
-git add .
-git status --short # Verify .env.local is absent
-git commit -m "Build Second Brain"
-git remote add origin https://github.com/YOUR_ACCOUNT/second-brain.git
-git push -u origin main
-npx vercel login
-npx vercel link
- npx vercel env add NEXT_PUBLIC_SUPABASE_URL production
- npx vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
- npx vercel env add SUPABASE_SERVICE_ROLE_KEY production
- npx vercel env add OPENROUTER_API_KEY production
-npx vercel --prod
+```text
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+OPENROUTER_API_KEY
+OPENROUTER_MODEL=openrouter/free
+NEXT_PUBLIC_APP_URL=https://your-app.vercel.app
 ```
 
-Paste each secret only when prompted. Finally verify the returned URL:
-
-```powershell
-curl.exe -I https://YOUR_DEPLOYMENT.vercel.app
-```
-
-## Screenshot / GIF
-
-Add a product screenshot or walkthrough GIF here after deployment.
+Never commit `.env.local`. After configuring variables, deploy with `npx vercel --prod`.

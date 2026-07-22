@@ -3,7 +3,9 @@ import { createClient } from '@/lib/supabase/server';
 import { classify, embed } from '@/lib/ai';
 import { extractFile, extractUrl } from '@/lib/extract';
 import { rateLimit } from '@/lib/rate-limit';
+
 export const runtime = 'nodejs';
+
 export async function POST(request: Request) {
   const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Please sign in first.' }, { status: 401 });
@@ -14,12 +16,8 @@ export async function POST(request: Request) {
     else if (kind === 'file') { const file = form.get('file'); if (!(file instanceof File) || !file.size) throw new Error('Choose a PDF, Markdown, or text file.'); if (file.size > 12 * 1024 * 1024) throw new Error('Files must be smaller than 12 MB.'); rawContent = await extractFile(file); title ||= file.name; const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_'); filePath = `${user.id}/${crypto.randomUUID()}-${safeName}`; const { error } = await supabase.storage.from('uploads').upload(filePath, file, { contentType: file.type || 'text/plain' }); if (error) throw error; }
     else rawContent = String(form.get('content') ?? '').trim();
     if (!rawContent.trim()) throw new Error('There was no text to save.');
-    console.log('Classifying content:', rawContent.substring(0, 100));
-    const metadata = await classify(rawContent, title); 
-    console.log('Classification result:', metadata);
-    console.log('Embedding content...');
+    const metadata = await classify(rawContent, title);
     const vector = await embed(`${metadata.title}\n${metadata.summary}\n${rawContent}`);
-    console.log('Embedding complete, vector length:', vector.length);
     const { data: item, error } = await supabase.from('items').insert({ user_id: user.id, type: kind === 'link' ? 'link' : kind === 'file' ? (filePath?.endsWith('.pdf') ? 'pdf' : 'file') : 'note', raw_content: rawContent, source_url: sourceUrl, file_path: filePath, ...metadata, embedding: vector }).select().single();
     if (error) throw error;
     const { data: matches, error: searchError } = await supabase.rpc('match_items', { query_embedding: vector, match_user_id: user.id, match_threshold: 0.72, match_count: 6 });
@@ -30,8 +28,7 @@ export async function POST(request: Request) {
     if (linkError) throw linkError;
     return NextResponse.json({ item, links: links ?? [] }, { status: 201 });
   } catch (error) {
-    // Log full error on the server for debugging
-    try { console.error('Capture error:', error); } catch (e) {}
+    console.error('Capture failed:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Capture failed. Try again.' }, { status: 400 });
   }
 }
